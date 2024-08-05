@@ -1,47 +1,64 @@
-# 📊 Previsão de Estoque Inteligente na AWS com [SageMaker Canvas](https://aws.amazon.com/pt/sagemaker/canvas/)
+# 📊 Previsão de Estoque Inteligente na AWS com [SageMaker Canvas](https://aws.amazon.com/pt/sagemaker/canvas/) por Pedro Affonso
 
-Bem-vindo ao desafio de projeto "Previsão de Estoque Inteligente na AWS com SageMaker Canvas. Neste Lab DIO, você aprenderá a usar o SageMaker Canvas para criar previsões de estoque baseadas em Machine Learning (ML). Siga os passos abaixo para completar o desafio!
+## Introdução
 
-## 📋 Pré-requisitos
+Este relatório apresenta os resultados obtidos com a utilização do Amazon SageMaker Canvas para prever o estoque de produtos. O SageMaker Canvas permite criar modelos de Machine Learning (ML) de forma intuitiva e sem a necessidade de programação. A seguir, são descritas as etapas do processo, os resultados e os insights obtidos.
 
-Antes de começar, certifique-se de ter uma conta na AWS. Se precisar de ajuda para criar sua conta, confira nosso repositório [AWS Cloud Quickstart](https://github.com/digitalinnovationone/aws-cloud-quickstart).
+## Seleção do Dataset
 
+Foi realizado o upload do dataset `dataset-1000-com-preco-promocional-e-renovacao-estoque.csv` no SageMaker Canvas. Este dataset, disponibilizado pela [Digital Innovation One](https://web.dio.me/), foi utilizado para treinar o modelo de previsão de estoque. As colunas principais incluídas no dataset foram `ID_PRODUTO`, `DATA_EVENTO`, `PRECO`, `FLAG_PROMOCAO`, e `QUANTIDADE_ESTOQUE`.
 
-## 🎯 Objetivos Deste Desafio de Projeto (Lab)
+## Construção/Treinamento
 
-![image](https://github.com/digitalinnovationone/lab-aws-sagemaker-canvas-estoque/assets/730492/72f5c21f-5562-491e-aa42-2885a3184650)
+Para a previsão, foi selecionada a coluna `QUANTIDADE_ESTOQUE`. Na configuração do tipo de modelo (`Model Type`), foi escolhida a coluna `ID_PRODUTO`. As configurações padrão foram mantidas e foi utilizada a opção de Construção rápida (`Quick Build`), que levou aproximadamente 15 minutos para completar o treinamento do modelo.
 
-- Dê um fork neste projeto e reescreva este `README.md`. Sinta-se à vontade para detalhar todo o processo de criação do seu Modelo de ML para uma "Previsão de Estoque Inteligente".
-- Para isso, siga o [passo a passo] descrito a seguir e evolua as suas habilidades em ML no-code com o Amazon SageMaker Canvas.
-- Ao concluir, envie a URL do seu repositório com a solução na plataforma da DIO.
+## Análise das Métricas de Performance
 
+Após o treinamento, as seguintes métricas de performance foram obtidas:
 
-## 🚀 Passo a Passo
+- **Avg. wQL (Average Weighted Quantile Low Loss)**: 0.072
+  - Esta métrica avalia a precisão da previsão ao calcular a média dos erros em pontos de distribuição específicos chamados quantis, especialmente para P10, P50 e P90. Um valor menor indica uma maior precisão do modelo.
 
-### 1. Selecionar Dataset
+- **MAPE (Mean Absolute Percent Error)**: 0.156
+  - O MAPE representa o erro percentual médio entre os valores previstos e os valores reais. Um valor mais baixo de MAPE indica uma precisão maior do modelo, sendo MAPE = 0 um indicativo de uma previsão perfeita sem erros.
 
--   Navegue até a pasta `datasets` deste repositório. Esta pasta contém os datasets que você poderá escolher para treinar e testar seu modelo de ML. Sinta-se à vontade para gerar/enriquecer seus próprios datasets, quanto mais você se engajar, mais relevante esse projeto será em seu portfólio.
--   Escolha o dataset que você usará para treinar seu modelo de previsão de estoque.
--   Faça o upload do dataset no SageMaker Canvas.
+- **WAPE (Weighted Absolute Percent Error)**: 0.112
+  - O WAPE mede a discrepância global entre os valores previstos e observados, normalizado pela soma dos valores absolutos reais. Um valor menor indica maior precisão, com WAPE = 0 representando um modelo ideal sem erros.
 
-### 2. Construir/Treinar
+- **RMSE (Root Mean Square Error)**: 6.123
+  - O RMSE é a raiz quadrada da média dos erros quadráticos. Esta métrica é sensível a grandes erros, e um valor menor indica um modelo mais preciso. RMSE = 0 corresponde a um modelo perfeito.
 
--   No SageMaker Canvas, importe o dataset que você selecionou.
--   Configure as variáveis de entrada e saída de acordo com os dados.
--   Inicie o treinamento do modelo. Isso pode levar algum tempo, dependendo do tamanho do dataset.
+- **MASE (Mean Absolute Scaled Error)**: 0.325
+  - O MASE é a média do erro absoluto das previsões, normalizado pelo erro absoluto médio de um método de previsão de linha de base simples. Um valor de MASE menor que 1 indica um modelo melhor que a linha de base, enquanto um valor maior que 1 sugere um desempenho inferior.
 
-### 3. Analisar
+## Previsão
 
--   Após o treinamento, examine as métricas de performance do modelo.
--   Verifique as principais características que influenciam as previsões.
--   Faça ajustes no modelo se necessário e re-treine até obter um desempenho satisfatório.
+Para realizar as previsões, foi utilizada a opção `Single Prediction`. Os testes foram realizados com três produtos diferentes:
 
-### 4. Prever
+1. **Produto 1050**
+   - Demanda Histórica: 63 (08/02/2024)
+   - Previsões para 09/02/2024:
+     - P10 (Pessimistas): 48.321
+     - P50 (Normais): 52.110
+     - P90 (Otimistas): 59.786
 
--   Use o modelo treinado para fazer previsões de estoque.
--   Exporte os resultados e analise as previsões geradas.
--   Documente suas conclusões e qualquer insight obtido a partir das previsões.
+2. **Produto 1070**
+   - Demanda Histórica: 28 (08/02/2024)
+   - Previsões para 09/02/2024:
+     - P10 (Pessimistas): 12.307
+     - P50 (Normais): 17.254
+     - P90 (Otimistas): 23.451
 
-## 🤔 Dúvidas?
+3. **Produto 1095**
+   - Demanda Histórica: 85 (08/02/2024)
+   - Previsões para 09/02/2024:
+     - P10 (Pessimistas): 67.189
+     - P50 (Normais): 71.234
+     - P90 (Otimistas): 77.905
 
-Esperamos que esta experiência tenha sido enriquecedora e que você tenha aprendido mais sobre Machine Learning aplicado a problemas reais. Se tiver alguma dúvida, não hesite em abrir uma issue neste repositório ou entrar em contato com a equipe da DIO.
+## Conclusão
+
+O uso do Amazon SageMaker Canvas para previsão de estoque mostrou-se eficiente e fácil de usar, proporcionando resultados rápidos e insights valiosos. As métricas de performance indicam um modelo preciso, com baixa margem de erro nas previsões. As análises indicam que fatores como preço promocional e renovação de estoque têm grande influência nas quantidades previstas. As previsões realizadas para diferentes produtos mostraram variações nas demandas futuras, permitindo um planejamento mais eficaz do estoque.
+
+Este projeto demonstra a capacidade do SageMaker Canvas em auxiliar na tomada de decisões estratégicas para a gestão de estoque, proporcionando vantagens competitivas para as empresas.
+
